@@ -23,29 +23,18 @@ Auth::routes();
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::get('table-list', function () {
-		return view('pages.table_list');
-	})->name('table');
+	
+	Route::get('tool-list', function () {
+		return view('pages.tool_list');
+	})->name('tools');
 
-	Route::get('typography', function () {
-		return view('pages.typography');
-	})->name('typography');
+	Route::get('event', function () {
+		return view('pages.event');
+	})->name('events');
 
-	Route::get('icons', function () {
-		return view('pages.icons');
-	})->name('icons');
-
-	Route::get('map', function () {
-		return view('pages.map');
-	})->name('map');
-
-	Route::get('notifications', function () {
-		return view('pages.notifications');
-	})->name('notifications');
-
-	Route::get('rtl-support', function () {
-		return view('pages.language');
-	})->name('language');
+	Route::get('about', function () {
+		return view('pages.about');
+	})->name('about');
 
 	Route::get('upgrade', function () {
 		return view('pages.upgrade');
