@@ -72,6 +72,23 @@
                 </div>
               @endif
             </div>
+
+              <div class="bmd-form-group{{ $errors->has('location') ? ' has-danger' : '' }}">
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                  <span class="input-group-text">
+                      <i class="material-icons">language</i>
+                  </span>
+                      </div>
+                      <input type="text" name="location" class="form-control" placeholder="{{ __('Location...') }}" value="{{ old('location') }}" required>
+                  </div>
+                  @if ($errors->has('location'))
+                      <div id="name-error" class="error text-danger pl-3" for="location" style="display: block;">
+                          <strong>{{ $errors->first('location') }}</strong>
+                      </div>
+                  @endif
+              </div>
+
             <div class="form-check mr-auto ml-3 mt-3">
               <label class="form-check-label">
                 <input class="form-check-input" type="checkbox" id="policy" name="policy" {{ old('policy', 1) ? 'checked' : '' }} >
