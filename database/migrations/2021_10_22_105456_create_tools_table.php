@@ -20,8 +20,8 @@ class CreateToolsTable extends Migration
             $table->string('tool_name');
             $table->string('location');
             $table->boolean('availability');
-            $table->string('borrowed_user');
-            $table->date('end_of_borrowed');
+            $table->string('borrowed_user')->nullable();
+            $table->date('end_of_borrowed')->nullable();
             $table->timestamps();
         });
     }
