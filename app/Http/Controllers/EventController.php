@@ -14,7 +14,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        $events = auth()->user()->evets()->get();
+        return $events;
     }
 
     /**
@@ -35,7 +36,14 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        auth()->user()->events()->create([
+            'user_id' =>auth()->user()->id,
+            'name'=> $request->event['name'],
+            'date' => $request->event['date'],
+            'slots' => $request->event['slots']
+        ]);
+
+        return "Event saved successfully";
     }
 
     /**
@@ -67,9 +75,21 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Event $event)
+//    public function update(Request $request, Event $event)
+    public function update(Request $request, $id)
     {
-        //
+        $event = Event::findOrFail($id);
+        $this->abortUnless($event);
+        if ($event){
+            $event->update([
+                'user_id' =>auth()->user()->id,
+                'name'=> $request->event['name'],
+                'date' => $request->event['date'],
+                'slots' => $request->event['slots']
+            ]);
+            return "Event updated successfully!";
+        }
+        return "Event not found!";
     }
 
     /**
@@ -78,8 +98,20 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
+//    public function destroy(Event $event)
+    public function destroy($id)
     {
-        //
+        $event = Event::findOrFail($id);
+        $this->abortUnless($event);
+        if ($event){
+            $event->delete();
+            return "Event deleted successfully.";
+        }
+        return "Event not found!";
+    }
+
+    public function abortUnless($event)
+    {
+        abort_unless(auth()->user()->owns($event), 403);
     }
 }
