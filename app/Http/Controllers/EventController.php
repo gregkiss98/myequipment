@@ -14,8 +14,9 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = auth()->user()->evets()->get();
-        return $events;
+        $events = Event::all();
+//        return $events;
+        return view('pages.event.index', compact($events));
     }
 
     /**
@@ -25,7 +26,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.event.create');
     }
 
     /**
@@ -43,7 +44,8 @@ class EventController extends Controller
             'slots' => $request->event['slots']
         ]);
 
-        return "Event saved successfully";
+//        return "Event saved successfully!";
+        return redirect(route('events.index'))->with('message', 'Event saved successfully!');
     }
 
     /**
@@ -65,7 +67,10 @@ class EventController extends Controller
      */
     public function edit(Event $event)
     {
-        //
+        $this->abortUnless($event);
+
+
+        return view('pages.event.create', compact('event'));
     }
 
     /**
@@ -87,9 +92,11 @@ class EventController extends Controller
                 'date' => $request->event['date'],
                 'slots' => $request->event['slots']
             ]);
-            return "Event updated successfully!";
+//            return "Event updated successfully!";
+            return redirect(route('events.index'))->with('message', 'Event updated successfully!');
         }
-        return "Event not found!";
+//        return "Event not found!";
+        return redirect(route('events.index'))->with('message', 'Event not found!');
     }
 
     /**
@@ -105,9 +112,11 @@ class EventController extends Controller
         $this->abortUnless($event);
         if ($event){
             $event->delete();
-            return "Event deleted successfully.";
+//            return "Event deleted successfully.";
+            return redirect()->back()->with('message', 'Event deleted successfully.');
         }
-        return "Event not found!";
+//        return "Event not found!";
+        return redirect()->back()->with('message', 'Event not found!');
     }
 
     public function abortUnless($event)

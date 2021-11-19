@@ -18,13 +18,13 @@
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'tools' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('tools') }}">
+        <a class="nav-link" href="{{ route('tools.index') }}">
           <i class="material-icons">carpenter</i>
             <p>{{ __('Tool list') }}</p>
         </a>
       </li>
       <li class="nav-item{{ $activePage == 'events' ? ' active' : '' }}">
-        <a class="nav-link" href="{{ route('events') }}">
+        <a class="nav-link" href="{{ route('events.index') }}">
           <i class="material-icons">event</i>
             <p>{{ __('Event List') }}</p>
         </a>

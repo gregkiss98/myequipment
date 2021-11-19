@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\ToolController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,14 +25,11 @@ Auth::routes();
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
-	
-	Route::get('tool-list', function () {
-		return view('pages.tool_list');
-	})->name('tools');
 
-	Route::get('event', function () {
-		return view('pages.event');
-	})->name('events');
+	Route::resource('tools', ToolController::class);
+    Route::put('tools/borrow/{id}', [ToolController::class, 'borrow'])->name('borrow');
+    Route::get('tools/endborrow/{id}', [ToolController::class, 'endborrow'])->name('endborrow');
+    Route::resource('events', EventController::class);
 
 	Route::get('about', function () {
 		return view('pages.about');

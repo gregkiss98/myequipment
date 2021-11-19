@@ -14,7 +14,7 @@
                         </div>
                         <div class="card-footer">
                             <div class="d-flex justify-content-end">
-                                <a class="btn btn-outline-warning" href="#" role="button">Tool list</a>
+                                <a class="btn btn-outline-warning" href="{{ route('tools.index') }}" role="button">Tool list</a>
                             </div>
                         </div>
                     </div>

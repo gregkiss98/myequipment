@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tool;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ToolController extends Controller
@@ -14,8 +15,10 @@ class ToolController extends Controller
      */
     public function index()
     {
-        $tools = auth()->user()->tools()->get();
-        return $tools;
+        $tools = Tool::all();
+        $authUser = auth()->user()->id;
+//        return $tools;
+        return view('pages.toolList.index', compact(['tools', 'authUser']));
     }
 
     /**
@@ -25,7 +28,7 @@ class ToolController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.toolList.create');
     }
 
     /**
@@ -36,16 +39,26 @@ class ToolController extends Controller
      */
     public function store(Request $request)
     {
+        $image_name = null;
+        $dest = 'storage/toolsImage/'; //Image Directory
+        if (($file = $request->file('image')) != null) {
+            $image_name = uniqid() . "." . $request->image->getClientOriginalExtension();
+            //Upload file
+            $move = $file->move(public_path($dest), $image_name);
+        }
+
         auth()->user()->tools()->create([
             'user_id' => auth()->user()->id,
-            'tool_name' => $request->tool['tool_name'],
-            'location' => $request->tool['location'],
-            'availability' => $request->tool['availability'],
-            'borrowed_user_id' => $request->tool['borrowed_user_id'],
-            'end_of_borrowed' => $request->tool['end_of_borrowed']
+            'tool_name' => $request->tool_name,
+            'location' => $request->location,
+            'picture' => $image_name
+//            'availability' => $request'availability,
+//            'borrowed_user_id' => $request->borrowed_user_id,
+//            'end_of_borrowed' => $request->end_of_borrowed
         ]);
 
-        return 'Tool saved successfully.';
+//        return 'Tool saved successfully.';
+        return redirect(route('tools.index'))->with('message', 'Tool saved successfully!');
     }
 
     /**
@@ -67,7 +80,9 @@ class ToolController extends Controller
      */
     public function edit(Tool $tool)
     {
-        //
+        $this->abortUnless($tool);
+
+        return view('pages.toolList.edit');
     }
 
     /**
@@ -82,7 +97,7 @@ class ToolController extends Controller
     {
         $tool = Tool::findOrFail($id);
         $this->abortUnless($tool);
-        if($tool){
+        if ($tool) {
             $tool->update([
                 'user_id' => auth()->user()->id,
                 'tool_name' => $request->tool['tool_name'],
@@ -91,10 +106,11 @@ class ToolController extends Controller
                 'borrowed_user_id' => $request->tool['borrowed_user_id'],
                 'end_of_borrowed' => $request->tool['end_of_borrowed']
             ]);
-            return "Tool updated successfully!";
+//            return "Tool updated successfully!";
+            return redirect(route('tools.index'))->with('message', 'Tool updated successfully!');
         }
-
-        return "Tool not found!";
+//        return "Tool not found!";
+        return redirect(route('events.index'))->with('message', 'Event not found!');
     }
 
     /**
@@ -108,15 +124,37 @@ class ToolController extends Controller
     {
         $tool = Tool::findOrFail($id);
         $this->abortUnless($tool);
-        if($tool){
+        if ($tool) {
             $tool->delete();
-            return "Tool deleted successfully!";
+//            return "Tool deleted successfully!";
+            return redirect()->back()->with('message', 'Tool deleted successfully.');
         }
-        return "Tool not found!";
+//        return "Tool not found!";
+        return redirect()->back()->with('message', 'Tool deleted successfully.');
     }
 
     public function abortUnless($tool)
     {
         abort_unless(auth()->user()->owns($tool), 403);
+    }
+
+    public function endborrow($id){
+        $tool = Tool::findOrFail($id);
+        $tool->update([
+            'availability' => true,
+            'borrowed_user_id' => null,
+            'end_of_borrowed' => null
+        ]);
+        return redirect()->back();
+    }
+
+    public function borrow($id, Request $request){
+        $tool = Tool::findOrFail($id);
+        $tool->update([
+            'availability' => false,
+            'borrowed_user_id' => auth()->user()->id,
+            'end_of_borrowed' => $request->date
+        ]);
+        return redirect()->back();
     }
 }
