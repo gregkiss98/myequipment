@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2021. Nov 03. 12:12
+-- Létrehozás ideje: 2021. Nov 21. 19:14
 -- Kiszolgáló verziója: 10.4.19-MariaDB
 -- PHP verzió: 8.0.6
 
@@ -112,8 +112,9 @@ CREATE TABLE `personal_access_tokens` (
 --
 
 INSERT INTO `personal_access_tokens` (`id`, `tokenable_type`, `tokenable_id`, `name`, `token`, `abilities`, `last_used_at`, `created_at`, `updated_at`) VALUES
-(1, 'App\\Models\\User', 1, 'my-app-token', 'e5cf1d5280c6a71dea6e54a441e85b5f90753d28da212b72b69a1986c7010bca', '[\"*\"]', '2021-11-03 10:38:28', '2021-11-03 10:29:46', '2021-11-03 10:38:28'),
-(2, 'App\\Models\\User', 2, 'my-app-token', '0c57fb4db192f5ca08246ce7c893dd49e3ad691e8d9b162d03325c8763233c94', '[\"*\"]', '2021-11-03 11:11:18', '2021-11-03 10:30:57', '2021-11-03 11:11:18');
+(1, 'App\\Models\\User', 1, 'my-app-token', 'e5cf1d5280c6a71dea6e54a441e85b5f90753d28da212b72b69a1986c7010bca', '[\"*\"]', '2021-11-05 09:49:28', '2021-11-03 10:29:46', '2021-11-05 09:49:28'),
+(2, 'App\\Models\\User', 2, 'my-app-token', '0c57fb4db192f5ca08246ce7c893dd49e3ad691e8d9b162d03325c8763233c94', '[\"*\"]', '2021-11-12 10:41:44', '2021-11-03 10:30:57', '2021-11-12 10:41:44'),
+(3, 'App\\Models\\User', 2, 'my-app-token', 'df2221256299af73df0838cc458cbfbf2ad5ae0354b7b3d2f5acfda63b92e34c', '[\"*\"]', NULL, '2021-11-05 09:47:46', '2021-11-05 09:47:46');
 
 -- --------------------------------------------------------
 
@@ -126,9 +127,10 @@ CREATE TABLE `tools` (
   `user_id` bigint(20) UNSIGNED NOT NULL,
   `tool_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `location` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `availability` tinyint(1) NOT NULL,
+  `availability` tinyint(1) NOT NULL DEFAULT 1,
   `borrowed_user_id` bigint(10) DEFAULT NULL,
   `end_of_borrowed` date DEFAULT NULL,
+  `picture` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -137,10 +139,11 @@ CREATE TABLE `tools` (
 -- A tábla adatainak kiíratása `tools`
 --
 
-INSERT INTO `tools` (`id`, `user_id`, `tool_name`, `location`, `availability`, `borrowed_user_id`, `end_of_borrowed`, `created_at`, `updated_at`) VALUES
-(1, 2, 'Laptop', 'Sopron', 1, NULL, NULL, NULL, NULL),
-(3, 2, 'Traktofünyíró', 'Kópháza', 0, 1, '2021-12-03', '2021-11-03 10:04:44', '2021-11-03 11:09:19'),
-(6, 2, 'Monitor', 'Kapuvár', 0, 1, '2021-12-03', '2021-11-03 11:11:20', '2021-11-03 11:11:20');
+INSERT INTO `tools` (`id`, `user_id`, `tool_name`, `location`, `availability`, `borrowed_user_id`, `end_of_borrowed`, `picture`, `created_at`, `updated_at`) VALUES
+(1, 2, 'Laptop', 'Sopron', 1, NULL, NULL, NULL, NULL, '2021-11-19 10:19:58'),
+(3, 2, 'Traktofünyíró', 'Sopron', 1, NULL, NULL, NULL, '2021-11-03 10:04:44', '2021-11-19 09:43:18'),
+(6, 2, 'Monitor', 'Sopron', 0, 1, '2021-12-03', NULL, '2021-11-03 11:11:20', '2021-11-03 11:11:20'),
+(14, 1, 'Szerszámoskészlet', 'Sopron', 1, NULL, NULL, '61953d7556b98.png', '2021-11-17 17:35:49', '2021-11-17 17:35:49');
 
 -- --------------------------------------------------------
 
@@ -248,13 +251,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT a táblához `personal_access_tokens`
 --
 ALTER TABLE `personal_access_tokens`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT a táblához `tools`
 --
 ALTER TABLE `tools`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT a táblához `users`
