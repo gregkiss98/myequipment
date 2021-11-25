@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -32,16 +33,16 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         auth()->user()->events()->create([
-            'user_id' =>auth()->user()->id,
-            'name'=> $request->event['name'],
-            'date' => $request->event['date'],
-            'slots' => $request->event['slots']
+            'user_id' => auth()->user()->id,
+            'name' => $request->name,
+            'date' => $request->date,
+            'slots' => $request->slots
         ]);
 
 //        return "Event saved successfully!";
@@ -51,7 +52,7 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Event  $event
+     * @param \App\Models\Event $event
      * @return \Illuminate\Http\Response
      */
     public function show(Event $event)
@@ -62,7 +63,7 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Event  $event
+     * @param \App\Models\Event $event
      * @return \Illuminate\Http\Response
      */
     public function edit(Event $event)
@@ -76,8 +77,8 @@ class EventController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Event  $event
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Event $event
      * @return \Illuminate\Http\Response
      */
 //    public function update(Request $request, Event $event)
@@ -85,12 +86,12 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
         $this->abortUnless($event);
-        if ($event){
+        if ($event) {
             $event->update([
-                'user_id' =>auth()->user()->id,
-                'name'=> $request->event['name'],
-                'date' => $request->event['date'],
-                'slots' => $request->event['slots']
+                'user_id' => auth()->user()->id,
+                'name' => $request->name,
+                'date' => $request->date,
+                'slots' => $request->slots
             ]);
 //            return "Event updated successfully!";
             return redirect(route('events.index'))->with('message', 'Event updated successfully!');
@@ -102,7 +103,7 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Event  $event
+     * @param \App\Models\Event $event
      * @return \Illuminate\Http\Response
      */
 //    public function destroy(Event $event)
@@ -110,7 +111,7 @@ class EventController extends Controller
     {
         $event = Event::findOrFail($id);
         $this->abortUnless($event);
-        if ($event){
+        if ($event) {
             $event->delete();
 //            return "Event deleted successfully.";
             return redirect()->back()->with('message', 'Event deleted successfully.');
@@ -122,5 +123,33 @@ class EventController extends Controller
     public function abortUnless($event)
     {
         abort_unless(auth()->user()->owns($event), 403);
+    }
+
+    public function supportIndex()
+    {
+        $userId = auth()->user()->id;
+        $super_user = auth()->user()->super_user;
+        return view('pages.event.support', compact(['userId', 'super_user']));
+    }
+
+    public function support($id, Request $request)
+    {
+        $user = User::findOrFail($id);
+        $user->update([
+            'super_user' => true,
+        ]);
+        return redirect(route('supportIndex'))->with('message', 'Thanks for your support.
+            You have become a super user, now you can create events!');
+//        return $user;
+    }
+
+    public function endsupport($id, Request $request)
+    {
+        $user = User::findOrFail($id);
+        $user->update([
+            'super_user' => false,
+        ]);
+        return redirect(route('supportIndex'))->with('message', 'You are a normal user. You can not create event!');
+//        return $user;
     }
 }

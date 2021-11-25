@@ -41,8 +41,8 @@
           <p>{{ __('User profile') }}</p>
           </a>
       </li>
-      <li class="nav-item active-pro{{ $activePage == 'upgrade' ? ' active' : '' }}">
-        <a class="nav-link text-white bg-danger" href="{{ route('upgrade') }}">
+      <li class="nav-item active-pro{{ $activePage == 'support' ? ' active' : '' }}">
+        <a class="nav-link text-white bg-danger" href="{{ route('supportIndex') }}">
           <i class="material-icons text-white">favorites</i>
           <p>{{ __('Support us!') }}</p>
         </a>

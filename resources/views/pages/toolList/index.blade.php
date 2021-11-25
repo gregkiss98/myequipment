@@ -11,6 +11,31 @@
             {{--                            <div class="d-none d-xl-block">XL</div>--}}
             {{--                        </div>--}}
             <a href="{{ route('tools.create') }}" type="button" class="btn btn-primary">Add new tool</a>
+
+            <div>
+                @if (session()->has("message"))
+                    {{$slot}}
+                    <div class="alert alert-success" role="alert">
+                        {{ session()->get('message') }}
+                    </div>
+                @elseif (session()->has('error'))
+                    {{ $slot }}
+                    <div class="alert alert-danger" role="alert">
+                        {{ session()->get('error') }}
+                    </div>
+                @endif
+
+                @if($errors->any())
+                    <div class="alert alert-danger" role="alert">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+            </div>
+
             <div class="row justify-content-center">
                 @forelse($tools as $tool)
                     <div class="card col-lg-3 col-md-4 col-sm-4 mr-3">

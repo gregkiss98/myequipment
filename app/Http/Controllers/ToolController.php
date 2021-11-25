@@ -52,13 +52,21 @@ class ToolController extends Controller
             'tool_name' => $request->tool_name,
             'location' => $request->location,
             'picture' => $image_name
-//            'availability' => $request'availability,
+        ]);
+        return redirect(route('tools.index'))->with('message', 'Tool saved successfully!');
+
+
+//        auth()->user()->tools()->create([
+//            'user_id' => auth()->user()->id,
+//            'tool_name' => $request->tool_name,
+//            'location' => $request->location,
+//            'availability' => $request->availability,
+//            'picture'=> null,
 //            'borrowed_user_id' => $request->borrowed_user_id,
 //            'end_of_borrowed' => $request->end_of_borrowed
-        ]);
-
+//        ]);
+//
 //        return 'Tool saved successfully.';
-        return redirect(route('tools.index'))->with('message', 'Tool saved successfully!');
     }
 
     /**
@@ -100,17 +108,31 @@ class ToolController extends Controller
         if ($tool) {
             $tool->update([
                 'user_id' => auth()->user()->id,
-                'tool_name' => $request->tool['tool_name'],
-                'location' => $request->tool['location'],
-                'availability' => $request->tool['availability'],
-                'borrowed_user_id' => $request->tool['borrowed_user_id'],
-                'end_of_borrowed' => $request->tool['end_of_borrowed']
+                'tool_name' => $request->tool_name,
+                'location' => $request->location,
+                'availability' => $request->availability,
+                'borrowed_user_id' => $request->borrowed_user_id,
+                'end_of_borrowed' => $request->end_of_borrowed
             ]);
-//            return "Tool updated successfully!";
             return redirect(route('tools.index'))->with('message', 'Tool updated successfully!');
         }
-//        return "Tool not found!";
         return redirect(route('events.index'))->with('message', 'Event not found!');
+
+//        $tool = Tool::findOrFail($id);
+//        $this->abortUnless($tool);
+//        if($tool){
+//            $tool->update([
+//                'user_id' => auth()->user()->id,
+//                'tool_name' => $request->tool_name,
+//                'location' => $request->location,
+//                'availability' => $request->availability,
+//                'borrowed_user_id' => $request->borrowed_user_id,
+//                'end_of_borrowed' => $request->end_of_borrowed
+//            ]);
+//            return "Tool updated successfully!";
+//        }
+//
+//        return "Tool not found!";
     }
 
     /**
@@ -126,11 +148,17 @@ class ToolController extends Controller
         $this->abortUnless($tool);
         if ($tool) {
             $tool->delete();
-//            return "Tool deleted successfully!";
             return redirect()->back()->with('message', 'Tool deleted successfully.');
         }
-//        return "Tool not found!";
         return redirect()->back()->with('message', 'Tool deleted successfully.');
+
+//        $tool = Tool::findOrFail($id);
+//        $this->abortUnless($tool);
+//        if($tool){
+//            $tool->delete();
+//            return "Tool deleted successfully!";
+//        }
+//        return "Tool not found!";
     }
 
     public function abortUnless($tool)
@@ -146,6 +174,7 @@ class ToolController extends Controller
             'end_of_borrowed' => null
         ]);
         return redirect()->back();
+//        return "End borrowed";
     }
 
     public function borrow($id, Request $request){
@@ -156,5 +185,6 @@ class ToolController extends Controller
             'end_of_borrowed' => $request->date
         ]);
         return redirect()->back();
+//        return 'You borrow this tool!';
     }
 }

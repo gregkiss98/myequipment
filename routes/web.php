@@ -30,6 +30,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('tools/borrow/{id}', [ToolController::class, 'borrow'])->name('borrow');
     Route::get('tools/endborrow/{id}', [ToolController::class, 'endborrow'])->name('endborrow');
     Route::resource('events', EventController::class);
+    Route::get('/supportIndex', [EventController::class, 'supportIndex'])->name('supportIndex');
+    Route::put('/support/{id}', [EventController::class, 'support'])->name('support');
+    Route::put('/endsupport/{id}', [EventController::class, 'endsupport'])->name('endsupport');
 
 	Route::get('about', function () {
 		return view('pages.about');

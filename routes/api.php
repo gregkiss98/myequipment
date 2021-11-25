@@ -23,7 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => 'auth:sanctum'], function (){
     Route::resource('/tools', ToolController::class);
+    Route::put('tools/borrow/{id}', [ToolController::class, 'borrow'])->name('borrow');
+    Route::get('tools/endborrow/{id}', [ToolController::class, 'endborrow'])->name('endborrow');
     Route::resource('/events', EventController::class);
+    Route::get('/support', [EventController::class, 'support'])->name('support');
 });
 
 Route::post('/tokenGen', [\App\Http\Controllers\UserController::class, 'tokenGen']);

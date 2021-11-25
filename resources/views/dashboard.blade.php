@@ -75,7 +75,7 @@
                         <div class="card-footer">
                             <div>
                                 <div class="d-flex justify-content-center">
-                                    <a class="btn btn-outline-info" href="#" role="button">Support US</a>
+                                    <a class="btn btn-outline-info" href="{{ route('supportIndex') }}" role="button">Support US</a>
                                 </div>
                             </div>
                         </div>
